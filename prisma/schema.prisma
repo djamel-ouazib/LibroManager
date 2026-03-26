@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+
+// 1. LES UTILISATEURS (Profiles)
+// On sépare l'Auth de Supabase des données de notre app
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  fullName      String
+  role          Role      @default(USER) // ADMIN ou USER
+  status        Status    @default(ACTIVE) // ACTIVE, BANNED, PENDING
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  borrowings    Borrowing[]
+  wishlist      Wishlist[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  ACTIVE
+  BANNED
+  PENDING
+}
+
+// 2. LES LIVRES
+model Book {
+  id              String   @id @default(uuid())
+  title           String
+  author          String
+  isbn            String   @unique
+  description     String?  @db.Text
+  coverUrl        String?  // URL du storage Supabase
+  category        String?
+  
+  // Stock
+  totalStock      Int      @default(1)
+  availableStock  Int      @default(1)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  borrowings      Borrowing[]
+  wishlist        Wishlist[]
+}
+
+// 3. LES EMPRUNTS (Table de liaison)
+model Borrowing {
+  id            String      @id @default(uuid())
+  bookId        String
+  userId        String
+  borrowDate    DateTime    @default(now())
+  dueDate       DateTime    // Date limite calculée par ton app (ex: J+14)
+  returnDate    DateTime?   // Sera rempli quand l'admin valide le retour
+  status        LoanStatus  @default(BORROWED)
+
+  // Relations
+  book          Book        @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([bookId])
+}
+
+enum LoanStatus {
+  BORROWED   // En cours
+  RETURNED   // Rendu
+  OVERDUE    // En retard
+}
+
+// 4. LA WISHLIST (Favoris)
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String
+  bookId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bookId]) // Un utilisateur ne peut pas mettre 2 fois le même livre en favori
+}
