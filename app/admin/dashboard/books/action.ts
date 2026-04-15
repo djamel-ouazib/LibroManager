@@ -52,7 +52,6 @@ export default async function deletBook(id: string) {
         })
     } catch (error) {
         console.error('Erreur suppression:', error)
-        return { error: 'Impossible de supprimer ce livre.' }
     }
     revalidatePath('/admin/dashboard/books')
     redirect('/admin/dashboard/books')

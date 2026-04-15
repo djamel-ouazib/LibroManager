@@ -48,16 +48,16 @@ export default async function BookDetailsPage({ params }: PageProps) {
                 {/* Infos du livre */}
                 <div className="flex-1">
                     <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-xs font-bold rounded-full uppercase">
-                        {book.category}
+                        {book?.category}
                     </span>
 
                     <h1 className="text-4xl font-black mt-4 text-zinc-900 dark:text-zinc-100">
-                        {book.title}
+                        {book?.title}
                     </h1>
                     <p className="text-xl text-zinc-500 mt-2">
                         par{' '}
                         <span className="font-medium text-zinc-700 dark:text-zinc-300">
-                            {book.author}
+                            {book?.author}
                         </span>
                     </p>
 
@@ -67,7 +67,7 @@ export default async function BookDetailsPage({ params }: PageProps) {
                                 ISBN
                             </p>
                             <p className="font-mono text-zinc-700 dark:text-zinc-300">
-                                {book.isbn}
+                                {book?.isbn}
                             </p>
                         </div>
                         <div>
@@ -75,10 +75,10 @@ export default async function BookDetailsPage({ params }: PageProps) {
                                 Disponibilité
                             </p>
                             <p
-                                className={`font-bold ${book.availableStock > 0 ? 'text-emerald-500' : 'text-red-500'}`}
+                                className={`font-bold ${(book?.availableStock ?? 0) > 0 ? 'text-emerald-500' : 'text-red-500'}`}
                             >
-                                {book.availableStock} sur {book.totalStock}{' '}
-                                exemplaires
+                                {book?.availableStock ?? 0} sur{' '}
+                                {book?.totalStock ?? 0} exemplaires
                             </p>
                         </div>
                     </div>
