@@ -31,7 +31,7 @@ export default async function BookDetailsPage({ params }: PageProps) {
                 {/* Image de couverture */}
                 <div className="w-full md:w-1/3">
                     <div className="aspect-2/3 relative rounded-2xl overflow-hidden shadow-2xl border dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900">
-                        {book.coverUrl ? (
+                        {book?.coverUrl ? (
                             <img
                                 src={book.coverUrl}
                                 alt={book.title}
