@@ -1,34 +1,84 @@
-import Image from 'next/image'
-import ThemeToggle from './components/ThemeToggle'
+'use client'
 import Navbar from './components/Navbar'
-
+import { motion, spring } from 'motion/react'
 export default function Home() {
     return (
-        <main className="min-h-screen pt-44 flex flex-col items-center  bg-white dark:bg-black ...">
-            <div className="fixed top-0 py-4 z-50 ">
+        <main className="min-h-screen  flex flex-col items-center  bg-white dark:bg-black ">
+            <div className="sticky top-0  z-50 ">
                 <Navbar />
             </div>
-            <div className="text-center space-y-6 mb-24">
-                <h1 className="text-5xl">
+            <div className="text-center  space-y-12 mb-24 mt-34 text-balance">
+                <motion.h1
+                    initial={{
+                        opacity: 0,
+                        y: 18,
+                        filter: 'blur(15px)',
+                    }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    transition={{ duration: 1.4, type: spring, bounce: 0 }}
+                    className="text-6xl text-balance font-semibold"
+                >
                     Smart Library Management Made Simple
-                </h1>
-                <p className="dark:text-zinc-400">
+                </motion.h1>
+                <motion.p
+                    initial={{
+                        opacity: 0,
+                        y: 18,
+                        filter: 'blur(15px)',
+                    }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    transition={{
+                        duration: 1.4,
+                        type: spring,
+                        bounce: 0,
+                        delay: 0.4,
+                    }}
+                    className="dark:text-zinc-400 text-balance mt-3 text-zinc-500"
+                >
                     Manage books, users, and borrowings...
-                </p>
+                </motion.p>
             </div>
             <div className="space-x-4 mb-24">
-                <button className="py-2 px-2 text-white bg-black rounded-xl dark:text-black dark:bg-white dark:hover:bg-zinc-400 cursor-pointer  hover:bg-black/60">
+                <motion.button
+                    initial={{
+                        opacity: 0,
+
+                        filter: 'blur(15px)',
+                    }}
+                    animate={{ opacity: 1, filter: 'blur(0px)' }}
+                    transition={{
+                        duration: 1.4,
+                        type: spring,
+                        bounce: 0,
+                        delay: 1.2,
+                    }}
+                    className="py-2 px-4 text-white bg-black rounded-sm dark:text-black dark:bg-white dark:hover:bg-zinc-400 cursor-pointer  hover:bg-black/60"
+                >
                     Get Started
-                </button>
-                <button className="py-2 px-2 text-white bg-black rounded-xl dark:text-black dark:bg-white  dark:hover:bg-zinc-400 cursor-pointer hover:bg-black/60">
+                </motion.button>
+                <motion.button
+                    initial={{
+                        opacity: 0,
+
+                        filter: 'blur(15px)',
+                    }}
+                    animate={{ opacity: 1, filter: 'blur(0px)' }}
+                    transition={{
+                        duration: 2,
+                        type: spring,
+                        bounce: 0,
+                        delay: 1,
+                    }}
+                    className="py-2 px-4 text-white bg-black rounded-sm dark:text-black dark:bg-white  dark:hover:bg-zinc-400 cursor-pointer hover:bg-black/60"
+                >
                     Explore Feautures
-                </button>
+                </motion.button>
             </div>
             <div className="w-6xl m-auto space-y-6 ">
                 <h2 className="text-2xl text-black dark:text-zinc-50">
                     Everything You Need to Manage Your Library
                 </h2>
-                <ul className="text-zinc-400 font-semibold  dark:text-zinc-400 space-y-2 px-8">
+                <ul className="text-zinc-400 font-semibold text-sm dark:text-zinc-400 space-y-2 px-8">
                     <li>
                         Secure authentication system with role-based access
                         (Admin & User).

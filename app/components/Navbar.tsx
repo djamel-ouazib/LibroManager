@@ -20,18 +20,24 @@ export default function Navbar() {
                     <li key={index}>
                         <Link
                             href={navlink.href}
-                            className="text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:text-zinc-950 hover:dark:text-zinc-50"
+                            className="hover:bg-zinc-50 rounded-sm text-sm dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:text-zinc-950 hover:dark:text-zinc-50"
                         >
                             {navlink.name}
                         </Link>
                     </li>
                 ))}
             </ul>
-            <div className=" flex-1 flex justify-center items-center">
-                <button className="py-2 px-4 rounded-xl dark:bg-white dark:text-black bg-black text-zinc-50">
-                    Log In
-                </button>
-                <div>
+            <div className="  flex-1 gap-1 flex justify-center items-center">
+                <div className="space-x-4">
+                    <button className="cursor-pointer hover:bg-zinc-50 rounded-sm text-sm dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:text-zinc-950 hover:dark:text-zinc-50">
+                        Sign up
+                    </button>
+                    <button className="py-2 px-4 rounded-sm cursor-pointer  dark:bg-white text-sm dark:text-black bg-black text-zinc-50">
+                        Log In
+                    </button>
+                </div>
+
+                <div className="p-2 ">
                     <ThemeToggle />
                 </div>
             </div>
