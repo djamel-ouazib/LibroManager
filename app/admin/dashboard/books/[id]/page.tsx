@@ -88,7 +88,7 @@ export default async function BookDetailsPage({ params }: PageProps) {
                             Résumé
                         </h2>
                         <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                            {book.description ||
+                            {book?.description ||
                                 'Aucune description disponible pour ce livre.'}
                         </p>
                     </div>
