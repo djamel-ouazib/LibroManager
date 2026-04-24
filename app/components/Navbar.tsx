@@ -29,12 +29,16 @@ export default function Navbar() {
             </ul>
             <div className="  flex-1 gap-1 flex justify-center items-center">
                 <div className="space-x-4">
-                    <button className="cursor-pointer hover:bg-zinc-50 rounded-sm text-sm dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:text-zinc-950 hover:dark:text-zinc-50">
-                        Sign up
-                    </button>
-                    <button className="py-2 px-4 rounded-sm cursor-pointer  dark:bg-white text-sm dark:text-black bg-black text-zinc-50">
-                        Log In
-                    </button>
+                    <Link href="/signup">
+                        <button className="cursor-pointer hover:bg-zinc-50 rounded-sm text-sm dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400 px-4 py-2 hover:text-zinc-950 hover:dark:text-zinc-50">
+                            Sign up
+                        </button>
+                    </Link>
+                    <Link href="/login">
+                        <button className="py-2 px-4 rounded-sm cursor-pointer  dark:bg-white text-sm dark:text-black bg-black text-zinc-50">
+                            Log In
+                        </button>
+                    </Link>
                 </div>
 
                 <div className="p-2 ">

@@ -27,8 +27,8 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body className="min-h-full flex flex-col">
                 <ThemeProvider attribute="class">{children}</ThemeProvider>
+                <Analytics />
             </body>
-            <Analytics />
         </html>
     )
 }

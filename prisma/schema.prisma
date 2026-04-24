@@ -20,16 +20,22 @@ datasource db {
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
-  fullName      String
-  role          Role      @default(USER) // ADMIN ou USER
-  status        Status    @default(ACTIVE) // ACTIVE, BANNED, PENDING
-  avatarUrl     String?
+  emailVerified Boolean   @default(false)  // ← ajouté pour Better Auth
+  name          String                     // ← Better Auth utilise "name" (renomme fullName)
+  image         String?                    // ← remplace avatarUrl
+  role          Role      @default(USER)
+  status        Status    @default(ACTIVE)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  // Relations
+  // Relations app
   borrowings    Borrowing[]
   wishlist      Wishlist[]
+
+  // Relations Better Auth
+  sessions      Session[]
+  accounts      Account[]
+  @@map("user")
 }
 
 enum Role {
@@ -100,4 +106,45 @@ model Wishlist {
   book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
 
   @@unique([userId, bookId]) // Un utilisateur ne peut pas mettre 2 fois le même livre en favori
+}
+
+model Session {
+	id String @id
+	user User @relation(fields: [userId], references: [id])
+	userId String
+	token String @unique
+	expiresAt DateTime @db.Timestamptz(3)
+	ipAddress String?
+	userAgent String?
+	createdAt DateTime @db.Timestamptz(3)
+	updatedAt DateTime @db.Timestamptz(3)
+	@@map("session")
+}
+
+model Account {
+	id String @id
+	user User @relation(fields: [userId], references: [id])
+	userId String
+	accountId String
+	providerId String
+	accessToken String?
+	refreshToken String?
+	accessTokenExpiresAt DateTime? @db.Timestamptz(3)
+	refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+	scope String?
+	idToken String?
+	password String?
+	createdAt DateTime @db.Timestamptz(3)
+	updatedAt DateTime @db.Timestamptz(3)
+	@@map("account")
+}
+
+model Verification {
+	id String @id
+	identifier String
+	value String
+	expiresAt DateTime @db.Timestamptz(3)
+	createdAt DateTime @db.Timestamptz(3)
+	updatedAt DateTime @db.Timestamptz(3)
+	@@map("verification")
 }
