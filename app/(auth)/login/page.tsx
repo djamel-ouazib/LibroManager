@@ -34,10 +34,18 @@ export default function Login() {
         )
     }
     return (
-        <>
+        <div className="h-screen bg-white dark:bg-black">
+            <div className="absolute top-7 left-1/3 -translate-x-1/2">
+                <Link
+                    className="text-gray-600 hover:text-gray-900 dark:text-zinc-50 dark:hover:text-zinc-400"
+                    href="/"
+                >
+                    &#8592; Back To
+                </Link>
+            </div>
             <div className="absolute top-1/6 left-1/2 -translate-x-1/2">
-                <div className="flex flex-col w-91.75 px-6 py-12 justify-center items-center gap-4 shadow-md border border-gray-200 rounded-[7px]">
-                    <h1 className="text-xl text-pretty">Welcome Back</h1>
+                <div className="flex flex-col w-91.75 px-6 py-12 justify-center items-center gap-4 shadow-md border border-gray-200 rounded-[7px] dark:bg-neutral-900 dark:border-zinc-700">
+                    <h1 className="text-xl text-pretty ">Welcome Back</h1>
                     <h3 className="text-zinc-500 mb-3 text-sm text-balance">
                         Sign in to continue to LibroManager.
                     </h3>
@@ -45,7 +53,7 @@ export default function Login() {
                     <div className="flex flex-col w-full">
                         <label
                             htmlFor=""
-                            className="font-semibold mb-0.5 text-sm"
+                            className="font-semibold mb-0.5 text-sm dark:text-zinc-200"
                         >
                             Email
                         </label>
@@ -56,13 +64,13 @@ export default function Login() {
                             }}
                             placeholder="dj.ouazib@gmail.com"
                             type="email"
-                            className="border text-sm p-2 border-gray-300 rounded-[7px] py-1"
+                            className="dark:bg-black dark:border-zinc-700 border text-sm p-2 border-gray-300 rounded-[7px] py-1"
                         />
                     </div>
                     <div className="flex flex-col w-full">
                         <label
                             htmlFor=""
-                            className="font-semibold mb-0.5 text-sm"
+                            className="font-semibold mb-0.5 text-sm dark:text-zinc-200"
                         >
                             Password
                         </label>
@@ -73,12 +81,12 @@ export default function Login() {
                             }}
                             placeholder="Enter yout password"
                             type="password"
-                            className="border text-sm p-2 border-gray-300 rounded-[7px] py-1"
+                            className="dark:bg-black border dark:border-zinc-700 text-sm p-2 border-gray-300 rounded-[7px] py-1"
                         />
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className="bg-black cursor-pointer  text-white w-full py-2 rounded-[7px]"
+                        className="bg-black cursor-pointer dark:hover:bg-zinc-200 dark:bg-white dark:text-black text-white w-full py-2 rounded-[7px]"
                     >
                         SingIn
                     </button>
@@ -94,6 +102,6 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

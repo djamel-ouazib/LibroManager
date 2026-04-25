@@ -1,5 +1,6 @@
 'use client'
 import { authClient } from '@/lib/auth-client'
+import Link from 'next/link'
 import { useState } from 'react'
 
 export default function SignUp() {
@@ -34,6 +35,11 @@ export default function SignUp() {
     }
     return (
         <>
+            <div className="absolute top-7 left-1/3 -translate-x-1/2">
+                <Link className="text-gray-600 hover:text-gray-900" href="/">
+                    &#8592; Back To
+                </Link>
+            </div>
             <div className="absolute top-1/6 left-1/2 -translate-x-1/2">
                 <div className="flex flex-col w-91.75 px-6 py-12 justify-center items-center gap-4 shadow-md border border-gray-200 rounded-[7px]">
                     <h1 className="text-xl text-pretty">
