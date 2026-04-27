@@ -10,10 +10,15 @@ export async function proxy(request: NextRequest) {
     if (!session) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
+    if (request.nextUrl.pathname.startsWith('/admin/')) {
+        if (session.user.role !== 'admin') {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
+    }
 
     return NextResponse.next()
 }
 
 export const config = {
-    matcher: ['/dashboard'], // Specify the routes the middleware applies to
+    matcher: ['/dashboard', '/admin'], // Specify the routes the middleware applies to
 }

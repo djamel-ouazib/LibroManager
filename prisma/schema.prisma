@@ -28,6 +28,11 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+    // Champs Better Auth Admin plugin
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime? @db.Timestamptz(3)
+
   // Relations app
   borrowings    Borrowing[]
   wishlist      Wishlist[]

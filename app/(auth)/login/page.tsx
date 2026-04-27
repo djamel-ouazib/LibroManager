@@ -1,37 +1,27 @@
 'use client'
 import { authClient } from '@/lib/auth-client'
 import Link from 'next/link'
+import router, { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Login() {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-
+    const router = useRouter()
     async function handleSubmit() {
-        const { error } = await authClient.signIn.email(
-            {
-                /**
-                 * The user email
-                 */
-                email,
-                /**
-                 * The user password
-                 */
-                password,
-                /**
-                 * A URL to redirect to after the user verifies their email (optional)
-                 */
-                callbackURL: '/dashboard',
-                /**
-                 * remember the user session after the browser is closed.
-                 * @default true
-                 */
-                rememberMe: false,
-            },
-            {
-                //callbacks
-            }
-        )
+        const { data, error } = await authClient.signIn.email({
+            email,
+            password,
+            rememberMe: false,
+        })
+
+        if (error) return
+
+        if (data?.user?.role === 'ADMIN') {
+            router.push('/admin/dashboard')
+        } else {
+            router.push('/dashboard')
+        }
     }
     return (
         <div className="h-screen bg-white dark:bg-black">

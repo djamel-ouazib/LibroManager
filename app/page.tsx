@@ -3,8 +3,8 @@ import Navbar from './components/Navbar'
 import { motion, spring } from 'motion/react'
 export default function Home() {
     return (
-        <main className="min-h-screen  flex flex-col items-center  bg-white dark:bg-black ">
-            <div className="sticky top-0  z-50 ">
+        <main className="min-h-screen   flex flex-col items-center  bg-white dark:bg-black ">
+            <div className="sticky   top-0  z-50 ">
                 <Navbar />
             </div>
             <div className="text-center  space-y-12 mb-24 mt-34 text-balance">
