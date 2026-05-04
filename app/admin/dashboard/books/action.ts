@@ -1,10 +1,11 @@
 'use server'
 
 import prisma from '@/lib/prisma'
+import { success } from 'better-auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function createBook(formData: FormData) {
+export async function createBook(prevState: any, formData: FormData) {
     const title = formData.get('title') as string
     const author = formData.get('author') as string
     const category = formData.get('category') as string
@@ -24,13 +25,14 @@ export async function createBook(formData: FormData) {
             category,
             isbn,
             totalStock,
-            availableStock: totalStock, // 🔥 IMPORTANT
+            availableStock: totalStock,
             coverUrl,
             description,
         },
     })
 
     revalidatePath('/admin/dashboard/books')
+    return { success: true }
 }
 
 export async function getBookById(id: string) {

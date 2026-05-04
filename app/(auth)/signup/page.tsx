@@ -1,14 +1,18 @@
 'use client'
 import { authClient } from '@/lib/auth-client'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+
 import { useState } from 'react'
 
 export default function SignUp() {
     const [name, setName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
 
     const handleSubmit = async () => {
+        setLoading(true)
         const { error } = await authClient.signUp.email(
             {
                 name, // user display name //
@@ -16,12 +20,14 @@ export default function SignUp() {
                 password, // user password -> min 8 characters by default
                 callbackURL: '/dashboard', // A URL to redirect to after the user verifies their email (optional)
             },
+
             {
                 onRequest: (ctx) => {
                     //show loading
                 },
                 onSuccess: (ctx) => {
                     //redirect to the dashboard or sign in page
+                    redirect('/login')
                 },
                 onError: (ctx) => {
                     // display the error message
@@ -29,6 +35,7 @@ export default function SignUp() {
                 },
             }
         )
+        setLoading(false)
     }
     async function handleGoogle() {
         await authClient.signIn.social({ provider: 'google' })
@@ -41,7 +48,13 @@ export default function SignUp() {
                 </Link>
             </div>
             <div className="absolute top-1/6 left-1/2 -translate-x-1/2">
-                <div className="flex flex-col w-91.75 px-6 py-12 justify-center items-center gap-4 shadow-md border border-gray-200 rounded-[7px]">
+                <div
+                    style={{
+                        boxShadow:
+                            '0px 0px 0px 1px rgba(9, 9, 11, 0.08), 0px 1px 2px -1px rgba(9, 9, 11, 0.08), 0px 2px 4px 0px rgba(9, 9, 11, 0.04)',
+                    }}
+                    className="flex flex-col w-91.75 px-6 py-12 justify-center items-center gap-4  rounded-[7px]"
+                >
                     <h1 className="text-xl text-pretty">
                         Sign up LibroManager
                     </h1>
@@ -103,7 +116,11 @@ export default function SignUp() {
                         onClick={handleSubmit}
                         className="bg-black cursor-pointer  text-white w-full py-2 rounded-[7px]"
                     >
-                        SingUp
+                        {loading ? (
+                            <span className="animate-pulse">loading</span>
+                        ) : (
+                            <span>SingUp</span>
+                        )}
                     </button>
                     <div className="flex w-full flex-row gap-1 justify-center items-center ">
                         <span className="h-px inline-block bg-gray-400 w-full"></span>

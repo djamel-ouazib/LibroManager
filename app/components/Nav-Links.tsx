@@ -4,6 +4,7 @@ import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
 import { authClient } from '@/lib/auth-client'
 import { redirect } from 'next/navigation'
+import { useState } from 'react'
 
 // 1. On définit la structure d'UN SEUL lien
 interface NavLinkItem {
@@ -35,7 +36,7 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                     <Link href="/dashboard">LibroManager</Link>
                 </span>
             </div>
-            <div>
+            <div className="bg-zinc-100 p-2 dark:text-black text-sm hover:bg-zinc-200 rounded-lg">
                 <p>{session?.user?.name}</p>
             </div>
             <ul className="flex flex-col  justify-center gap-6">
@@ -60,7 +61,7 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
             <div>
                 <button
                     onClick={handleLogOut}
-                    className="py-1 px-4 rounded-[7px] bg-red-200 text-red-600 w-full"
+                    className="py-1 px-4 focus:scale-95 rounded-[7px] bg-red-200 text-red-600 w-full"
                 >
                     Logout
                 </button>

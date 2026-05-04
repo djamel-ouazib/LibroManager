@@ -13,7 +13,7 @@ export default function Navbar() {
         { name: 'Contact', href: '/contact' },
     ]
     return (
-        <nav className="  lg:w-6xl sm:w-3xl  flex  p-2 py-4 items-center  justify-between bg-white dark:bg-black">
+        <nav className="  lg:w-6xl sm:w-3xl  flex  p-2 py-4 items-center transition-colors duration-500 justify-between bg-white dark:bg-black">
             <div className="flex-1">
                 <h1 className="text-3xl  sm:text-2xl font-semibold text-black dark:text-zinc-50">
                     LibroManager
@@ -45,7 +45,7 @@ export default function Navbar() {
                     </Link>
                 </div>
 
-                <div className="p-2 sm:hidden">
+                <div className="p-2 ">
                     <ThemeToggle />
                 </div>
                 <button

@@ -21,5 +21,10 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         },
     },
-    plugins: [admin()],
+    plugins: [
+        admin({
+            defaultRole: 'USER', // majuscule pour matcher ton enum
+            adminRole: 'ADMIN',
+        }),
+    ],
 })

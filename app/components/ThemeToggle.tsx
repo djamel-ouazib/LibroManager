@@ -20,7 +20,7 @@ const ThemeToggle = () => {
     return (
         <button
             onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
-            className="  bg-gray-200 cursor-pointer p-2 dark:bg-zinc-800 rounded-full"
+            className="  bg-gray-50 cursor-pointer p-2 dark:bg-zinc-800 rounded-full"
         >
             {currentTheme === 'dark' ? (
                 <FaMoon className=" h-5 w-5 "></FaMoon>

@@ -7,14 +7,16 @@ import { useState } from 'react'
 export default function Login() {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
     async function handleSubmit() {
+        setLoading(true)
         const { data, error } = await authClient.signIn.email({
             email,
             password,
             rememberMe: false,
         })
-
+        setLoading(false)
         if (error) return
 
         if (data?.user?.role === 'ADMIN') {
@@ -34,7 +36,13 @@ export default function Login() {
                 </Link>
             </div>
             <div className="absolute top-1/6 left-1/2 -translate-x-1/2">
-                <div className="flex flex-col w-91.75 px-6 py-12 justify-center items-center gap-4 shadow-md border border-gray-200 rounded-[7px] dark:bg-neutral-900 dark:border-zinc-700">
+                <div
+                    style={{
+                        boxShadow:
+                            '0px 0px 0px 1px rgba(9, 9, 11, 0.08), 0px 1px 2px -1px rgba(9, 9, 11, 0.08), 0px 2px 4px 0px rgba(9, 9, 11, 0.04)',
+                    }}
+                    className="flex flex-col w-91.75 px-6 py-12 justify-center items-center gap-4  rounded-[7px] dark:bg-neutral-900 dark:border-zinc-700"
+                >
                     <h1 className="text-xl text-pretty ">Welcome Back</h1>
                     <h3 className="text-zinc-500 mb-3 text-sm text-balance">
                         Sign in to continue to LibroManager.
@@ -78,7 +86,11 @@ export default function Login() {
                         onClick={handleSubmit}
                         className="bg-black cursor-pointer dark:hover:bg-zinc-200 dark:bg-white dark:text-black text-white w-full py-2 rounded-[7px]"
                     >
-                        SingIn
+                        {loading ? (
+                            <span className="animate-pulse">loading</span>
+                        ) : (
+                            <span>SingIn</span>
+                        )}
                     </button>
                     <div className="flex w-full flex-row gap-1 justify-center items-center ">
                         <span className="h-px inline-block bg-gray-400 w-full"></span>
