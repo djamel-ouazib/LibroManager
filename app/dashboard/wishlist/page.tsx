@@ -1,9 +1,11 @@
+import { getUserWishlist } from './action'
+
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import SettingsClient from '@/app/dashboard/settings/SettingsClient'
+import WishlistClient from './WishlistClient'
 
-export default async function AdminSettingsPage() {
+export default async function WishlistPage() {
     // Get current session server-side
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -12,6 +14,8 @@ export default async function AdminSettingsPage() {
     // Redirect to login if not authenticated
     if (!session?.user?.id) redirect('/login')
 
-    // Reuse the same SettingsClient component as the user settings
-    return <SettingsClient user={session.user} />
+    // Fetch only this user's wishlist
+    const wishlist = await getUserWishlist(session.user.id)
+
+    return <WishlistClient wishlist={wishlist} userId={session.user.id} />
 }

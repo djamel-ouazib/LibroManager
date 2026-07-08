@@ -1,9 +1,17 @@
-import StatCard from '@/app/components/StatCard'
+import { getAdminDashboardData } from './action'
+import AdminDashboardClient from './AdminDashboardClient'
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
+    // Fetch all dashboard data server-side
+    const data = await getAdminDashboardData()
+
     return (
-        <div className="p-6 bg-white dark:bg-neutral-800 w-full border dark:border-zinc-800 border-zinc-300 rounded-2xl">
-            <StatCard />
+        <div className="p-6 dark:bg-black w-full h-screen overflow-y-auto">
+            <AdminDashboardClient
+                stats={data.stats}
+                recentLoans={data.recentLoans}
+                recentMembers={data.recentMembers}
+            />
         </div>
     )
 }

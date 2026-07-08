@@ -18,15 +18,15 @@ export default function StatusDropdown({ onClose, userId }: Props) {
             <div className="fixed inset-0 z-40" onClick={onClose} />
             <div
                 className="
-                absolute z-50 w-25 -left-1/2  mt-1 rounded-[14px] p-1.5  bg-white/20 backdrop-blur-2xl saturate-190 border-[0.5px] border-white/18  shadow-[0_4px_24px_rgba(0,0,0,0.3),inset_0_0.5px_0_rgba(255,255,255,0.25)]
+                absolute z-50 w-25 -left-1/2  mt-1 rounded-[14px] p-1.5  bg-white  border border-zinc-200 
             "
             >
-                <ul className="flex flex-col gap-px items-center p-2 list-none">
+                <ul className="flex flex-col gap-px items-center font-bold p-0.5  list-none">
                     <li
                         onClick={() => {
                             handleChange('ACTIVE')
                         }}
-                        className="text-emerald-400 px-3.5 py-2 border-b-2 border-gray-200 text-sm font-medium cursor-pointer hover:bg-white/10 transition-colors "
+                        className="text-emerald-400 w-full text-center rounded-md py-2   text-sm  cursor-pointer hover:bg-zinc-100 "
                     >
                         Active
                     </li>
@@ -35,7 +35,7 @@ export default function StatusDropdown({ onClose, userId }: Props) {
                         onClick={() => {
                             handleChange('BANNED')
                         }}
-                        className="text-red-400 px-3.5 border-b-2 py-2 border-gray-200 text-sm font-medium cursor-pointer hover:bg-white/10 transition-colors"
+                        className="text-red-400 w-full text-center rounded-md py-2   text-sm  cursor-pointer hover:bg-zinc-100 "
                     >
                         Banned
                     </li>
@@ -44,7 +44,7 @@ export default function StatusDropdown({ onClose, userId }: Props) {
                         onClick={() => {
                             handleChange('PENDING')
                         }}
-                        className="text-blue-400 px-3.5 py-2 border-b-2 border-gray-200 text-sm font-medium cursor-pointer hover:bg-white/10 transition-colors"
+                        className="text-blue-400 w-full text-center rounded-md py-2   text-sm  cursor-pointer hover:bg-zinc-100 "
                     >
                         Pending
                     </li>

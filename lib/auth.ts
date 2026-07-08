@@ -23,8 +23,10 @@ export const auth = betterAuth({
     },
     plugins: [
         admin({
-            defaultRole: 'USER', // majuscule pour matcher ton enum
+            defaultRole: 'USER',
             adminRole: 'ADMIN',
+            bannedUserMessage:
+                'Your account has been banned. Please contact support.',
         }),
     ],
 })

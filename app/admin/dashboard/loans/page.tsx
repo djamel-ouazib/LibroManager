@@ -1,7 +1,9 @@
-export default function Loans() {
-    return (
-        <div className="p-6 bg-white dark:bg-neutral-800 w-full border dark:border-zinc-800 border-zinc-300 rounded-2xl">
-            Loans
-        </div>
-    )
+import { getAllLoans } from './action'
+import LoansAdminClient from './LoansAdminClient'
+
+export default async function AdminLoansPage() {
+    // Fetch all loans server-side
+    const loans = await getAllLoans()
+
+    return <LoansAdminClient loans={loans} />
 }

@@ -5,7 +5,7 @@ import SubmitButton from './submitButton'
 import Toast from './ui/Toast'
 
 export default function BookForm() {
-    const [showToast, setShowToast] = useState<boolean>(true)
+    const [showToast, setShowToast] = useState<boolean>(false)
     const [state, action] = useActionState(createBook, null)
 
     useEffect(() => {

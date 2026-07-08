@@ -1,9 +1,9 @@
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import SettingsClient from '@/app/dashboard/settings/SettingsClient'
+import SettingsClient from './SettingsClient'
 
-export default async function AdminSettingsPage() {
+export default async function SettingsPage() {
     // Get current session server-side
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -12,6 +12,5 @@ export default async function AdminSettingsPage() {
     // Redirect to login if not authenticated
     if (!session?.user?.id) redirect('/login')
 
-    // Reuse the same SettingsClient component as the user settings
     return <SettingsClient user={session.user} />
 }
