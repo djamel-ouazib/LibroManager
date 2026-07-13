@@ -4,7 +4,7 @@ import DetailsBook from '../app/components/detailsBooks'
 import type { Book } from '../app/generated/prisma/client'
 
 // Mock authClient to avoid real session calls during tests
-vi.mock('@/lib/auth-client', () => ({
+vi.mock('../lib/auth-client', () => ({
     authClient: {
         useSession: () => ({
             data: {
@@ -14,8 +14,8 @@ vi.mock('@/lib/auth-client', () => ({
     },
 }))
 
-// Mock borrowBook Server Action
-vi.mock('@/app/dashboard/explore/actions', () => ({
+// Mock borrowBook Server Action to avoid real database calls
+vi.mock('../app/dashboard/explore/actions', () => ({
     borrowBook: vi.fn().mockResolvedValue({
         success: true,
         message: 'Book borrowed successfully!',
@@ -37,7 +37,7 @@ const mockBook: Book = {
     updatedAt: new Date(),
 }
 
-// Helper to render the modal in open state
+// Helper to render the modal in open state with optional overrides
 const renderModal = (overrides = {}) => {
     const setShowBook = vi.fn()
     render(
