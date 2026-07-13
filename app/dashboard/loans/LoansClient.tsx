@@ -3,11 +3,12 @@ import { useState, useMemo } from 'react'
 import { HiSearch, HiX, HiBookOpen } from 'react-icons/hi'
 import type { Borrowing, Book } from '@/app/generated/prisma/client'
 
-// Borrowing enriched with book details
+// Borrowing type enriched with related book details
 type LoanWithBook = Borrowing & {
     book: Book
 }
 
+// Props for the loans client component
 interface LoansClientProps {
     loans: LoanWithBook[]
 }
@@ -19,7 +20,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
     // Filter by loan status (null = show all)
     const [activeStatus, setActiveStatus] = useState<string | null>(null)
 
-    // Filter loans based on search query and status
+    // Filter loans based on search query and active status
     const filteredLoans = useMemo(() => {
         return loans.filter((loan) => {
             // Match against book title or author
@@ -27,7 +28,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
                 loan.book.title.toLowerCase().includes(search.toLowerCase()) ||
                 loan.book.author.toLowerCase().includes(search.toLowerCase())
 
-            // Match against selected status, or allow all
+            // Match against selected status, or allow all if none selected
             const matchesStatus = activeStatus
                 ? loan.status === activeStatus
                 : true
@@ -36,7 +37,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
         })
     }, [loans, search, activeStatus])
 
-    // Returns the right color classes based on loan status
+    // Returns the right Tailwind color classes based on loan status
     function getStatusStyle(status: string) {
         switch (status) {
             case 'BORROWED':
@@ -50,7 +51,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
         }
     }
 
-    // Format date to readable string
+    // Format a date to a human-readable string (e.g. "13 Jul 2026")
     function formatDate(date: Date) {
         return new Date(date).toLocaleDateString('en-GB', {
             day: '2-digit',
@@ -59,7 +60,10 @@ export default function LoansClient({ loans }: LoansClientProps) {
         })
     }
 
+    // Available status filters
     const statuses = ['BORROWED', 'RETURNED', 'OVERDUE']
+
+    // True when no loans match the current search or filter
     const hasNoResults = filteredLoans.length === 0
 
     return (
@@ -76,6 +80,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
 
             {/* ── SEARCH BAR ── */}
             <div className="relative mb-6 w-full max-w-md">
+                {/* Search icon — non-interactive, decorative */}
                 <HiSearch
                     size={16}
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none"
@@ -95,7 +100,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
                         transition-all duration-150
                     "
                 />
-                {/* Clear search button */}
+                {/* Clear search button — only visible when search has a value */}
                 {search && (
                     <button
                         onClick={() => setSearch('')}
@@ -124,7 +129,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
                     All
                 </button>
 
-                {/* One pill per status */}
+                {/* One pill per loan status */}
                 {statuses.map((status) => (
                     <button
                         key={status}
@@ -144,12 +149,13 @@ export default function LoansClient({ loans }: LoansClientProps) {
                 ))}
             </div>
 
-            {/* ── EMPTY STATE — no loans at all ── */}
+            {/* ── EMPTY STATE — user has no loans at all ── */}
             {loans.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 text-zinc-400">
                     <HiBookOpen size={32} className="mb-3 opacity-40" />
+                    {/* Escaped apostrophe to avoid ESLint react/no-unescaped-entities error */}
                     <p className="text-sm">
-                        You haven't borrowed any books yet
+                        You haven&apos;t borrowed any books yet
                     </p>
                 </div>
             )}
@@ -171,7 +177,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
                 </div>
             )}
 
-            {/* ── LOANS CARDS ── card layout instead of table for user-facing UI */}
+            {/* ── LOANS CARDS ── card layout for user-facing UI */}
             {!hasNoResults && (
                 <div className="flex flex-col gap-3">
                     {filteredLoans.map((loan) => (
@@ -184,7 +190,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
                                 rounded-xl
                             "
                         >
-                            {/* Book cover thumbnail */}
+                            {/* Book cover thumbnail with fallback icon */}
                             <div className="w-12 h-16 shrink-0 rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
                                 {loan.book.coverUrl ? (
                                     <img
@@ -200,7 +206,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
                                 )}
                             </div>
 
-                            {/* Book info */}
+                            {/* Book title, author and loan dates */}
                             <div className="flex-1 min-w-0">
                                 <p className="font-medium dark:text-white truncate">
                                     {loan.book.title}
@@ -213,7 +219,8 @@ export default function LoansClient({ loans }: LoansClientProps) {
                                     <span>
                                         Borrowed: {formatDate(loan.borrowDate)}
                                     </span>
-                                    {/* Due date — red if overdue */}
+
+                                    {/* Due date — highlighted in red if overdue */}
                                     <span
                                         className={
                                             loan.status === 'OVERDUE'
@@ -223,7 +230,8 @@ export default function LoansClient({ loans }: LoansClientProps) {
                                     >
                                         Due: {formatDate(loan.dueDate)}
                                     </span>
-                                    {/* Return date — only shown if returned */}
+
+                                    {/* Return date — only shown when loan is returned */}
                                     {loan.returnDate && (
                                         <span className="text-emerald-500">
                                             Returned:{' '}
@@ -233,7 +241,7 @@ export default function LoansClient({ loans }: LoansClientProps) {
                                 </div>
                             </div>
 
-                            {/* Status badge */}
+                            {/* Status badge — color changes based on loan status */}
                             <span
                                 className={`
                                 shrink-0 px-2 py-1 rounded-full text-xs font-bold uppercase

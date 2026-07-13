@@ -9,10 +9,11 @@ import {
 } from 'react-icons/hi'
 import type { Borrowing, Wishlist, Book } from '@/app/generated/prisma/client'
 
-// Types enriched with book details
+// Types enriched with related book details
 type LoanWithBook = Borrowing & { book: Book }
 type WishlistWithBook = Wishlist & { book: Book }
 
+// Stats shape passed from the server component
 interface Stats {
     activeBorrowings: number
     returnedBorrowings: number
@@ -20,6 +21,7 @@ interface Stats {
     wishlistCount: number
 }
 
+// Props for the dashboard client component
 interface DashboardClientProps {
     user: { name: string; email: string; image?: string | null }
     stats: Stats
@@ -33,7 +35,7 @@ export default function DashboardClient({
     recentLoans,
     recentWishlist,
 }: DashboardClientProps) {
-    // Format date to readable string
+    // Format a date to a human-readable string (e.g. "13 Jul 2026")
     function formatDate(date: Date) {
         return new Date(date).toLocaleDateString('en-GB', {
             day: '2-digit',
@@ -42,7 +44,7 @@ export default function DashboardClient({
         })
     }
 
-    // Stat cards config
+    // Stat cards configuration — each card shows a key metric
     const statCards = [
         {
             label: 'Active Loans',
@@ -76,17 +78,18 @@ export default function DashboardClient({
 
     return (
         <div className="p-6 dark:bg-black w-full h-screen overflow-y-auto">
-            {/* ── WELCOME HEADER ── */}
+            {/* ── WELCOME HEADER ── personalized greeting using first name */}
             <div className="mb-8">
                 <h1 className="text-2xl font-semibold dark:text-white">
                     Welcome back, {user.name.split(' ')[0]} 👋
                 </h1>
+                {/* Escaped apostrophe to avoid ESLint react/no-unescaped-entities error */}
                 <p className="text-sm text-zinc-500 mt-1">
-                    Here's what's happening with your library activity
+                    Here&apos;s what&apos;s happening with your library activity
                 </p>
             </div>
 
-            {/* ── STATS CARDS ── */}
+            {/* ── STATS CARDS ── grid of 4 key metrics */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
                 {statCards.map((stat) => (
                     <div
@@ -98,14 +101,14 @@ export default function DashboardClient({
                             flex flex-col gap-3
                         "
                     >
-                        {/* Icon */}
+                        {/* Colored icon badge */}
                         <div
                             className={`w-9 h-9 rounded-lg flex items-center justify-center ${stat.bg} ${stat.color}`}
                         >
                             {stat.icon}
                         </div>
 
-                        {/* Value and label */}
+                        {/* Numeric value and label */}
                         <div>
                             <p className="text-2xl font-bold dark:text-white">
                                 {stat.value}
@@ -118,11 +121,10 @@ export default function DashboardClient({
                 ))}
             </div>
 
-            {/* ── BOTTOM SECTION — recent loans + wishlist side by side ── */}
+            {/* ── BOTTOM SECTION ── recent loans and wishlist side by side */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* ── RECENT ACTIVE LOANS ── */}
+                {/* ── RECENT ACTIVE LOANS ── shows the 3 most recent active loans */}
                 <div className="bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-zinc-700 rounded-xl p-5">
-                    {/* Section header with link to full loans page */}
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="font-semibold dark:text-white">
                             Active Loans
@@ -135,7 +137,7 @@ export default function DashboardClient({
                         </Link>
                     </div>
 
-                    {/* Empty state */}
+                    {/* Empty state when no active loans exist */}
                     {recentLoans.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 text-zinc-400">
                             <HiBookOpen size={24} className="mb-2 opacity-40" />
@@ -148,7 +150,7 @@ export default function DashboardClient({
                                     key={loan.id}
                                     className="flex items-center gap-3"
                                 >
-                                    {/* Book cover thumbnail */}
+                                    {/* Book cover thumbnail with fallback icon */}
                                     <div className="w-10 h-14 shrink-0 rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
                                         {loan.book.coverUrl ? (
                                             <img
@@ -163,7 +165,7 @@ export default function DashboardClient({
                                         )}
                                     </div>
 
-                                    {/* Book info */}
+                                    {/* Book title, author and due date */}
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-medium dark:text-white truncate">
                                             {loan.book.title}
@@ -171,8 +173,6 @@ export default function DashboardClient({
                                         <p className="text-xs text-zinc-400">
                                             {loan.book.author}
                                         </p>
-
-                                        {/* Due date with clock icon */}
                                         <div className="flex items-center gap-1 mt-1">
                                             <HiClock
                                                 size={10}
@@ -184,7 +184,7 @@ export default function DashboardClient({
                                         </div>
                                     </div>
 
-                                    {/* Overdue badge */}
+                                    {/* Overdue badge — only shown when status is OVERDUE */}
                                     {loan.status === 'OVERDUE' && (
                                         <span className="shrink-0 px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-500 text-xs font-bold rounded-full">
                                             Overdue
@@ -196,9 +196,8 @@ export default function DashboardClient({
                     )}
                 </div>
 
-                {/* ── RECENT WISHLIST ── */}
+                {/* ── RECENT WISHLIST ── shows the 3 most recently saved books */}
                 <div className="bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-zinc-700 rounded-xl p-5">
-                    {/* Section header with link to full wishlist page */}
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="font-semibold dark:text-white">
                             Wishlist
@@ -211,7 +210,7 @@ export default function DashboardClient({
                         </Link>
                     </div>
 
-                    {/* Empty state */}
+                    {/* Empty state when wishlist is empty */}
                     {recentWishlist.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 text-zinc-400">
                             <HiHeart size={24} className="mb-2 opacity-40" />
@@ -224,7 +223,7 @@ export default function DashboardClient({
                                     key={item.id}
                                     className="flex items-center gap-3"
                                 >
-                                    {/* Book cover thumbnail */}
+                                    {/* Book cover thumbnail with fallback icon */}
                                     <div className="w-10 h-14 shrink-0 rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
                                         {item.book.coverUrl ? (
                                             <img
@@ -239,7 +238,7 @@ export default function DashboardClient({
                                         )}
                                     </div>
 
-                                    {/* Book info */}
+                                    {/* Book title, author and category badge */}
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-medium dark:text-white truncate">
                                             {item.book.title}
@@ -247,8 +246,6 @@ export default function DashboardClient({
                                         <p className="text-xs text-zinc-400">
                                             {item.book.author}
                                         </p>
-
-                                        {/* Category badge */}
                                         {item.book.category && (
                                             <span className="inline-block mt-1 px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-500 text-xs rounded-full">
                                                 {item.book.category}
@@ -256,7 +253,7 @@ export default function DashboardClient({
                                         )}
                                     </div>
 
-                                    {/* Availability indicator */}
+                                    {/* Availability indicator — green if available, red if not */}
                                     <span
                                         className={`shrink-0 text-xs font-medium ${item.book.availableStock > 0 ? 'text-emerald-500' : 'text-red-400'}`}
                                     >

@@ -8,11 +8,13 @@ import type { Book } from '@/app/generated/prisma/client'
 interface ExploreClientProps {
     books: Book[]
     categories: string[]
+    wishlistIds: string[]
 }
 
 export default function ExploreClient({
     books,
     categories,
+    wishlistIds,
 }: ExploreClientProps) {
     // Search input value
     const [search, setSearch] = useState<string>('')
@@ -88,7 +90,7 @@ export default function ExploreClient({
                         transition-all duration-150
                     "
                 />
-                {/* Clear button — only shown when search has a value */}
+                {/* Clear search input button — only visible when search has a value */}
                 {search && (
                     <button
                         onClick={() => setSearch('')}
@@ -117,7 +119,7 @@ export default function ExploreClient({
                     All
                 </button>
 
-                {/* One pill per category fetched from the database */}
+                {/* One pill per category — dynamically extracted from the database */}
                 {categories.map((category) => (
                     <button
                         key={category}
@@ -137,13 +139,16 @@ export default function ExploreClient({
                 ))}
             </div>
 
-            {/* ── NO RESULTS STATE ── */}
+            {/* ── NO RESULTS STATE — shown when search/filter returns nothing ── */}
             {hasNoResults && (
                 <div className="flex flex-col items-center justify-center py-20 text-zinc-400">
                     <HiSearch size={32} className="mb-3 opacity-40" />
                     <p className="text-sm">
+                        {/* Escaped quotes to avoid ESLint react/no-unescaped-entities error */}
                         No books found for{' '}
-                        <span className="font-medium">"{search}"</span>
+                        <span className="font-medium">
+                            &quot;{search}&quot;
+                        </span>
                     </p>
                     {/* Reset all active filters */}
                     <button
@@ -172,10 +177,14 @@ export default function ExploreClient({
                         </span>
                     </div>
 
-                    {/* Books grid */}
+                    {/* Books grid — each card shows cover, title, author and wishlist button */}
                     <div className="flex flex-wrap gap-3">
                         {booksInCategory.map((book) => (
-                            <Card key={book.id} book={book} />
+                            <Card
+                                key={book.id}
+                                book={book}
+                                isWishlisted={wishlistIds.includes(book.id)}
+                            />
                         ))}
                     </div>
                 </div>
