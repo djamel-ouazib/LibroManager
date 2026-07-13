@@ -182,7 +182,7 @@ export default function AdminDashboardClient({
                                     className="flex items-center gap-3"
                                 >
                                     {/* Book cover thumbnail */}
-                                    <div className="w-10 h-14 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
+                                    <div className="w-10 h-14 shrink-0 rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
                                         {loan.book.coverUrl ? (
                                             <img
                                                 src={loan.book.coverUrl}
@@ -209,7 +209,7 @@ export default function AdminDashboardClient({
 
                                     {/* Loan status badge */}
                                     <span
-                                        className={`flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-bold uppercase ${getStatusStyle(loan.status)}`}
+                                        className={`shrink-0 px-2 py-0.5 rounded-full text-xs font-bold uppercase ${getStatusStyle(loan.status)}`}
                                     >
                                         {loan.status}
                                     </span>
@@ -248,7 +248,7 @@ export default function AdminDashboardClient({
                                     className="flex items-center gap-3"
                                 >
                                     {/* Member avatar — initials fallback */}
-                                    <div className="w-9 h-9 flex-shrink-0 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center">
+                                    <div className="w-9 h-9 shrink-0 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center">
                                         <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
                                             {member.name
                                                 ?.charAt(0)
@@ -269,7 +269,7 @@ export default function AdminDashboardClient({
                                     {/* Member status badge */}
                                     <span
                                         className={`
-                                        flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-bold uppercase
+                                        shrink-0 px-2 py-0.5 rounded-full text-xs font-bold uppercase
                                         ${
                                             member.status === 'ACTIVE'
                                                 ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400'
