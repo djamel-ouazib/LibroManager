@@ -4,10 +4,16 @@ import { createBook } from '../admin/dashboard/books/action'
 import SubmitButton from './submitButton'
 import Toast from './ui/Toast'
 
+// Form component for creating a new book in the admin panel
 export default function BookForm() {
+    // Controls toast notification visibility
     const [showToast, setShowToast] = useState<boolean>(false)
+
+    // useActionState manages the Server Action state (success/error)
     const [state, action] = useActionState(createBook, null)
 
+    // Show toast notification for 5 seconds when book is created successfully
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => {
         if (state?.success) {
             setShowToast(true)
@@ -17,7 +23,7 @@ export default function BookForm() {
 
     return (
         <>
-            {/* Toast */}
+            {/* Toast notification — shown after successful book creation */}
             <Toast showToast={showToast} setShowToast={setShowToast} />
 
             <div className="w-full z-50 max-w-2xl mx-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -25,7 +31,9 @@ export default function BookForm() {
                     Add a new book
                 </h2>
 
+                {/* Book creation form — action is the Server Action from useActionState */}
                 <form className="space-y-5" action={action}>
+                    {/* Title field */}
                     <div className="flex flex-col gap-1">
                         <label
                             htmlFor="title"
@@ -41,6 +49,7 @@ export default function BookForm() {
                         />
                     </div>
 
+                    {/* Author field */}
                     <div className="flex flex-col gap-1">
                         <label
                             htmlFor="author"
@@ -56,6 +65,7 @@ export default function BookForm() {
                         />
                     </div>
 
+                    {/* Category, ISBN, Stock and Cover URL fields */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
                             <label
@@ -71,12 +81,13 @@ export default function BookForm() {
                                 className="px-3 py-2 rounded-lg border border-zinc-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-black/80 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
                             />
                         </div>
+
                         <div className="flex flex-col gap-1">
                             <label
                                 htmlFor="isbn"
                                 className="text-sm font-medium text-zinc-600 dark:text-zinc-300"
                             >
-                                Isbn
+                                ISBN
                             </label>
                             <input
                                 id="isbn"
@@ -85,6 +96,7 @@ export default function BookForm() {
                                 className="px-3 py-2 rounded-lg border border-zinc-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-black/80 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
                             />
                         </div>
+
                         <div className="flex flex-col gap-1">
                             <label
                                 htmlFor="totalStock"
@@ -100,23 +112,25 @@ export default function BookForm() {
                                 className="px-3 py-2 rounded-lg border border-zinc-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-black/80 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
                             />
                         </div>
+
                         <div className="flex flex-col gap-1">
                             <label
                                 htmlFor="coverUrl"
                                 className="text-sm font-medium text-zinc-600 dark:text-zinc-300"
                             >
-                                coverUrl
+                                Cover URL
                             </label>
                             <input
                                 id="coverUrl"
                                 name="coverUrl"
                                 type="text"
-                                placeholder="e.g http//:"
+                                placeholder="https://example.com/cover.jpg"
                                 className="px-3 py-2 rounded-lg border border-zinc-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-black/80 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
                             />
                         </div>
                     </div>
 
+                    {/* Description textarea */}
                     <div className="flex flex-col gap-1">
                         <label
                             htmlFor="description"
@@ -133,6 +147,7 @@ export default function BookForm() {
                         />
                     </div>
 
+                    {/* Submit button with loading state */}
                     <SubmitButton />
                 </form>
             </div>

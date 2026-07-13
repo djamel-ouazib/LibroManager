@@ -13,9 +13,17 @@ interface NavLinkItem {
     icon: React.ReactNode
 }
 
-// Props definition — no more isOpen/onClose needed from parent
+// Props definition for the NavLinks component
 interface NavLinksProps {
     Nav_Links: NavLinkItem[]
+}
+
+// Props for the shared sidebar content sub-component
+interface SidebarContentProps {
+    Nav_Links: NavLinkItem[]
+    session: { user?: { name?: string | null } } | null
+    onLinkClick?: () => void
+    onLogout: () => void
 }
 
 // Handles user sign out and redirects to login page on success
@@ -29,23 +37,17 @@ async function handleLogOut() {
     })
 }
 
-export default function NavLinks({ Nav_Links }: NavLinksProps) {
-    // Get current user session data
-    const { data: session } = authClient.useSession()
-
-    // Controls the logout confirmation modal visibility
-    const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false)
-
-    // Controls sidebar open/close on mobile (closed by default)
-    const [mobileOpen, setMobileOpen] = useState<boolean>(false)
-
-    // Controls sidebar open/close on desktop (open by default)
-    const [desktopOpen, setDesktopOpen] = useState<boolean>(true)
-
-    // Shared sidebar content to avoid duplication between mobile and desktop
-    const SidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => (
+// Shared sidebar content — declared OUTSIDE the parent component
+// to avoid ESLint react-hooks/static-components error
+function SidebarContent({
+    Nav_Links,
+    session,
+    onLinkClick,
+    onLogout,
+}: SidebarContentProps) {
+    return (
         <>
-            {/* App logo */}
+            {/* App logo — clicking redirects to dashboard */}
             <div>
                 <span className="text-xl font-semibold tracking-wide whitespace-nowrap">
                     <Link href="/dashboard" onClick={onLinkClick}>
@@ -54,20 +56,21 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                 </span>
             </div>
 
-            {/* Current user display */}
+            {/* Current logged-in user display */}
             <div className="bg-zinc-100 p-2 dark:text-black text-sm hover:bg-zinc-200 rounded-lg">
                 <p className="whitespace-nowrap truncate">
                     {session?.user?.name}
                 </p>
             </div>
 
-            {/* Navigation links */}
+            {/* Navigation links list */}
             <ul className="flex flex-col justify-center gap-2">
                 {Nav_Links.map((navlink, index) => (
                     <li
                         key={index}
                         className="dark:hover:bg-zinc-700 hover:bg-zinc-100 px-2 rounded-[7px]"
                     >
+                        {/* Each link closes the sidebar on mobile when clicked */}
                         <Link
                             href={navlink.href}
                             onClick={onLinkClick}
@@ -82,7 +85,7 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                 ))}
             </ul>
 
-            {/* Theme toggle */}
+            {/* Theme toggle (light / dark mode) */}
             <div>
                 <ThemeToggle />
             </div>
@@ -90,7 +93,7 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
             {/* Logout button — opens confirmation modal */}
             <div>
                 <button
-                    onClick={() => setShowLogoutModal(true)}
+                    onClick={onLogout}
                     className="py-1 px-4 focus:scale-95 rounded-[7px] bg-red-200 text-red-600 w-full whitespace-nowrap"
                 >
                     Logout
@@ -98,6 +101,20 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
             </div>
         </>
     )
+}
+
+export default function NavLinks({ Nav_Links }: NavLinksProps) {
+    // Get current user session data
+    const { data: session } = authClient.useSession()
+
+    // Controls the logout confirmation modal visibility
+    const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false)
+
+    // Controls sidebar open/close on mobile (closed by default)
+    const [mobileOpen, setMobileOpen] = useState<boolean>(false)
+
+    // Controls sidebar open/close on desktop (open by default)
+    const [desktopOpen, setDesktopOpen] = useState<boolean>(true)
 
     return (
         <>
@@ -128,7 +145,7 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                 />
             )}
 
-            {/* Sidebar panel — slides in from the left */}
+            {/* Sidebar panel — slides in from the left on mobile */}
             <div
                 className={`
                 fixed top-0 left-0 z-40 h-screen w-62.5
@@ -156,7 +173,13 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                     <HiX size={16} />
                 </button>
 
-                <SidebarContent onLinkClick={() => setMobileOpen(false)} />
+                {/* Shared sidebar content with mobile close callback */}
+                <SidebarContent
+                    Nav_Links={Nav_Links}
+                    session={session}
+                    onLinkClick={() => setMobileOpen(false)}
+                    onLogout={() => setShowLogoutModal(true)}
+                />
             </div>
 
             {/* ── DESKTOP SIDEBAR ───────────────────────────────────────── */}
@@ -169,9 +192,14 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                 ${desktopOpen ? 'w-62.5 p-6' : 'w-0 overflow-hidden border-r-0'}
             `}
             >
-                <SidebarContent />
+                {/* Shared sidebar content without mobile close callback */}
+                <SidebarContent
+                    Nav_Links={Nav_Links}
+                    session={session}
+                    onLogout={() => setShowLogoutModal(true)}
+                />
 
-                {/* Notion-style collapse button — top right edge of the sidebar */}
+                {/* Notion-style collapse button — positioned at top right edge */}
                 <button
                     onClick={() => setDesktopOpen(false)}
                     className="
@@ -188,7 +216,7 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                 </button>
             </aside>
 
-            {/* Re-open button — appears at top left when desktop sidebar is closed */}
+            {/* Re-open button — visible at top left when desktop sidebar is closed */}
             {!desktopOpen && (
                 <button
                     onClick={() => setDesktopOpen(true)}
@@ -237,7 +265,7 @@ export default function NavLinks({ Nav_Links }: NavLinksProps) {
                             >
                                 Cancel
                             </button>
-                            {/* Confirm — triggers logout */}
+                            {/* Confirm — closes modal and triggers logout */}
                             <button
                                 onClick={() => {
                                     setShowLogoutModal(false)

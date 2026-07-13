@@ -1,11 +1,31 @@
 'use server'
 
 import prisma from '@/lib/prisma'
-import { success } from 'better-auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function createBook(prevState: any, formData: FormData) {
+// Type for the book update payload
+interface BookUpdateData {
+    title: string
+    author: string
+    category: string
+    totalStock: number | string
+    description: string
+    coverUrl: string
+}
+
+// Type for the Server Action state returned to useActionState
+interface ActionState {
+    success?: boolean
+    error?: string
+}
+
+// Create a new book in the database
+export async function createBook(
+    prevState: ActionState | null,
+    formData: FormData
+) {
+    // Extract and cast form fields
     const title = formData.get('title') as string
     const author = formData.get('author') as string
     const category = formData.get('category') as string
@@ -14,10 +34,12 @@ export async function createBook(prevState: any, formData: FormData) {
     const coverUrl = formData.get('coverUrl') as string
     const description = formData.get('description') as string
 
+    // Validate required fields before hitting the database
     if (!title || !author || !isbn) {
         throw new Error('Missing fields')
     }
 
+    // Insert the new book — availableStock starts equal to totalStock
     await prisma.book.create({
         data: {
             title,
@@ -31,38 +53,44 @@ export async function createBook(prevState: any, formData: FormData) {
         },
     })
 
+    // Revalidate the books list page to reflect the new entry
     revalidatePath('/admin/dashboard/books')
     return { success: true }
 }
 
+// Fetch a single book by its ID
 export async function getBookById(id: string) {
     try {
         const book = await prisma.book.findUnique({
-            where: { id: id },
+            where: { id },
         })
         return book
     } catch (error) {
-        console.error('Erreur lors de la récupération du livre:', error)
+        console.error('Error fetching book:', error)
         return null
     }
 }
 
+// Delete a book by its ID and redirect to the books list
 export default async function deletBook(id: string) {
     try {
         await prisma.book.delete({
-            where: { id: id },
+            where: { id },
         })
     } catch (error) {
-        console.error('Erreur suppression:', error)
+        console.error('Error deleting book:', error)
     }
+
+    // Revalidate and redirect after deletion
     revalidatePath('/admin/dashboard/books')
     redirect('/admin/dashboard/books')
 }
 
-export async function updateBook(id: string, data: any) {
+// Update an existing book by its ID
+export async function updateBook(id: string, data: BookUpdateData) {
     try {
         await prisma.book.update({
-            where: { id: id },
+            where: { id },
             data: {
                 title: data.title,
                 author: data.author,
@@ -73,10 +101,11 @@ export async function updateBook(id: string, data: any) {
             },
         })
     } catch (error) {
-        console.error('Erreur modification:', error)
-        return { error: 'Erreur lors de la mise à jour.' }
+        console.error('Error updating book:', error)
+        return { error: 'Failed to update book.' }
     }
 
+    // Revalidate both the detail page and the books list
     revalidatePath(`/admin/dashboard/books/${id}`)
     revalidatePath('/admin/dashboard/books')
 }
