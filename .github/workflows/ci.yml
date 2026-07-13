@@ -30,13 +30,19 @@ jobs:
                   version: 10
 
             - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+              run: pnpm install
+
+            - name: Generate Prisma client
+              run: pnpm prisma generate
 
             - name: TypeScript check
               run: pnpm tsc --noEmit
 
             - name: ESLint
               run: pnpm lint
+
+            - name: Security tests
+              run: pnpm test
 
             - name: Build
               run: pnpm build
