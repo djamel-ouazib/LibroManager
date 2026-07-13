@@ -15,9 +15,13 @@ export default function BookForm() {
     // Show toast notification for 5 seconds when book is created successfully
     // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => {
-        if (state?.success) {
-            setShowToast(true)
-            setTimeout(() => setShowToast(false), 5000)
+        if (!state?.success) return
+        // Deferred state update to avoid synchronous setState in effect
+        const show = setTimeout(() => setShowToast(true), 0)
+        const hide = setTimeout(() => setShowToast(false), 5000)
+        return () => {
+            clearTimeout(show)
+            clearTimeout(hide)
         }
     }, [state])
 

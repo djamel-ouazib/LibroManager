@@ -11,7 +11,9 @@ const ThemeToggle = () => {
     // Wait for component to mount before rendering
     // to avoid hydration mismatch between server and client
     useEffect(() => {
-        setMounted(true)
+        // Deferred state update to avoid hydration mismatch
+        const timeout = setTimeout(() => setMounted(true), 0)
+        return () => clearTimeout(timeout)
     }, [])
 
     // Render an empty placeholder to avoid layout shift during hydration
