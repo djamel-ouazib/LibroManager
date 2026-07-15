@@ -69,46 +69,87 @@ export default function Home() {
             </div>
 
             {/* ── FEATURES SECTION ── key features list */}
-            <div className="w-6xl m-auto space-y-6">
-                <h2 className="text-2xl text-black dark:text-zinc-50">
+            {/* ── FEATURES SECTION ── key features list */}
+            <motion.div
+                className="w-full max-w-5xl m-auto px-8 space-y-8"
+                initial={{ opacity: 0, filter: 'blur(15px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                transition={{
+                    duration: 1.4,
+                    type: spring,
+                    bounce: 0,
+                    delay: 1.2,
+                }}
+            >
+                <h2 className="text-2xl text-black dark:text-zinc-50 font-serif">
                     Everything You Need to Manage Your Library
                 </h2>
-                <ul className="text-zinc-400 font-semibold text-sm dark:text-zinc-400 space-y-2 px-8">
-                    <li>
-                        Secure authentication system with role-based access
-                        (Admin &amp; User).
-                    </li>
-                    <li>
-                        Easily browse, search, and manage a complete collection
-                        of books.
-                    </li>
-                    <li>
-                        Allow users to borrow and return books with real-time
-                        tracking.
-                    </li>
-                    <li>
-                        Get full control and insights with a powerful
-                        administrative dashboard.
-                    </li>
-                    <li>
-                        Access your library from any device with a clean and
-                        modern interface.
-                    </li>
-                </ul>
-            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-200 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-sm overflow-hidden">
+                    {[
+                        {
+                            call: '020.1',
+                            title: 'Role-based access',
+                            text: 'Secure authentication with separate Admin and User permissions.',
+                        },
+                        {
+                            call: '025.3',
+                            title: 'Full catalog control',
+                            text: 'Browse, search, and manage your entire book collection.',
+                        },
+                        {
+                            call: '651.2',
+                            title: 'Real-time circulation',
+                            text: 'Track every borrow and return the moment it happens.',
+                        },
+                        {
+                            call: '004.6',
+                            title: 'Admin dashboard',
+                            text: 'Full oversight and insight into how your library is used.',
+                        },
+                    ].map((f) => (
+                        <div
+                            key={f.call}
+                            className="bg-white dark:bg-black p-6"
+                        >
+                            <span className="font-mono text-xs text-zinc-400">
+                                {f.call}
+                            </span>
+                            <p className="text-black dark:text-zinc-50 font-medium mt-1">
+                                {f.title}
+                            </p>
+                            <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2">
+                                {f.text}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </motion.div>
 
             {/* ── HOW IT WORKS SECTION ── step by step guide */}
-            <div className="w-6xl m-auto space-y-6">
-                <h2 className="text-2xl text-black dark:text-zinc-50">
+            <div className="w-full max-w-3xl m-auto px-8 space-y-8 mt-24">
+                <h2 className="text-2xl text-black dark:text-zinc-50 font-serif">
                     How It Works
                 </h2>
-                <ul className="text-zinc-400 font-semibold dark:text-zinc-400 space-y-2 px-8">
-                    <li>Create an account or log in securely</li>
-                    <li>Browse the library catalog</li>
-                    <li>Borrow your favorite books</li>
-                    {/* Escaped apostrophe to avoid ESLint react/no-unescaped-entities error */}
-                    <li>Return books easily when you&apos;re done</li>
-                </ul>
+                <ol className="space-y-0">
+                    {[
+                        'Create an account or log in securely',
+                        'Browse the library catalog',
+                        'Borrow your favorite books',
+                        "Return books easily when you're done",
+                    ].map((step, i) => (
+                        <li
+                            key={step}
+                            className="flex items-baseline gap-5 py-4 border-t border-zinc-200 dark:border-zinc-800 first:border-t-0"
+                        >
+                            <span className="font-mono text-sm text-zinc-400">
+                                {String(i + 1).padStart(3, '0')}
+                            </span>
+                            <span className="text-zinc-600 dark:text-zinc-300">
+                                {step}
+                            </span>
+                        </li>
+                    ))}
+                </ol>
             </div>
         </main>
     )
